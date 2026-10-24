@@ -16,6 +16,7 @@
 :root[data-theme="grape"]{--bg1:#ead9ff;--bg2:#d9e6ff;--card:#fcf9ffee;--tx:#3a2a66;--mut:#8a78b8;--line:#d4c1f5;--cell:#fefcff;--cell2:#f1e8ff;--hl:#ffd6ec;--p:#9b5cff;--p2:#ff6fb5;color-scheme:light}
 .th{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);cursor:pointer;padding:0}.th.sel{border-color:var(--p);box-shadow:0 0 0 4px #7c4dff44;transform:scale(1.12)}
 #gstats{display:none}#chat{padding:8px}#stk{flex-wrap:nowrap;overflow-x:auto}.pl{padding:4px 8px}#room b{font-size:24px}
+#bChat{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:46px;height:46px;border-radius:50%;padding:0;font-size:21px;z-index:42;box-shadow:0 4px 12px #0003}#chatN{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:10px;font-size:12px;line-height:18px;min-width:18px;padding:0 4px}#chatN:empty{display:none}#chat{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 68px);width:min(320px,calc(100vw - 24px));z-index:41;margin:0!important;box-shadow:0 8px 24px #0004}#chat #clog{height:170px}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--tx);font-family:"Baloo 2","Segoe UI",system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;display:flex;justify-content:center;padding:14px}
@@ -185,7 +186,7 @@ button.b.sm{font-size:14px;padding:6px 12px}
   <div id="tbar" class="hide"><div id="tfill"></div><div id="tnum"></div></div>
   <div id="bw"><canvas id="board"></canvas></div>
   <div class="row" id="thr" style="margin-top:8px;gap:6px"><button class="b sm" id="zO" title="Thu nhỏ">➖</button><button class="b sm" id="zC" title="Về nước cuối">🎯</button><button class="b sm" id="zI" title="Phóng to">➕</button><button class="b sm" data-k="stone">🪨 Đá</button><button class="b sm" data-k="egg">🥚 Trứng</button><button class="b sm" data-k="flower">🌹 Hoa</button></div>
-  <div class="row" style="margin-top:8px"><button class="b p hide" id="bAgain">🔁 Ván mới (đổi bên)</button><button class="b" id="bChat">💬 Chat <span id="chatN"></span></button><button class="b" id="bFr">👥 Mời bạn bè</button><button class="b" id="bTheme">🎨 Màu</button><button class="b" id="bLeave">Thoát phòng</button></div>
+  <div class="row" style="margin-top:8px"><button class="b p hide" id="bAgain">🔁 Ván mới (đổi bên)</button><button class="b" id="bChat" title="Chat">💬<span id="chatN"></span></button><button class="b" id="bFr">👥 Mời bạn bè</button><button class="b" id="bTheme">🎨 Màu</button><button class="b" id="bLeave">Thoát phòng</button></div>
   <div id="chat" class="card hide" style="margin-top:12px"><div id="clog"></div><div id="stk"></div><div class="row" style="flex-wrap:nowrap"><input id="ctext" maxlength="100" placeholder="Nhắn gì đó…" autocomplete="off"><button class="b p sm" id="bSend">Gửi</button></div></div>
   <div id="fbox" class="card hide" style="margin-top:12px"><div id="fl2"></div></div>
 </div>
@@ -398,9 +399,9 @@ $('zO').onclick=()=>{const[W,H]=dim();zoom(.8,[W/2,H/2])};
 $('zC').onclick=focus;
 
 function showGame(label){
-  document.querySelector('.logo').classList.add('hide');$('lobby').classList.add('hide');$('game').classList.remove('hide');$('fbox').classList.add('hide');$('code').textContent=label;
+  document.body.classList.add('ing');document.querySelector('.logo').classList.add('hide');$('lobby').classList.add('hide');$('game').classList.remove('hide');$('fbox').classList.add('hide');$('code').textContent=label;
   ['room','bFr'].forEach(i=>$(i).classList.toggle('hide',!!bot));
-  showStats();$('clog').innerHTML='';unread=0;$('chatN').textContent='';$('chat').classList.remove('hide');V.s=42;
+  showStats();$('clog').innerHTML='';unread=0;$('chatN').textContent='';$('chat').classList.add('hide');V.s=42;
 }
 function listen(c){
   if(es)es.close();
@@ -535,7 +536,7 @@ function onChat(m){
   const av=$(m.m==='X'?'plX':'plO').querySelector('svg');av.classList.remove('talk');void av.getBoundingClientRect();av.classList.add('talk');setTimeout(()=>av.classList.remove('talk'),1300);
   const bub=$(m.m==='X'?'bubX':'bubO');bub.textContent=msg;bub.className='bub show'+(m.st&&m.st.length<=2?' big':'');
   clearTimeout(bub._t);bub._t=setTimeout(()=>bub.className='bub',m.st?3000:4500);
-  if($('chat').classList.contains('hide')&&!mine){unread++;$('chatN').textContent='('+unread+')'}
+  if($('chat').classList.contains('hide')&&!mine){unread++;$('chatN').textContent=unread}
 }
 function fireworks(){
   const cv=$('fw'),ctx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;cv.classList.remove('hide');
@@ -568,7 +569,7 @@ async function again(){
 function leave(){
   if(es)es.close();es=null;g=null;code='';bot=null;
   try{history.replaceState(null,'',location.pathname)}catch(e){}
-  document.querySelector('.logo').classList.remove('hide');showStats();$('tbar').classList.add('hide');
+  document.body.classList.remove('ing');document.querySelector('.logo').classList.remove('hide');showStats();$('tbar').classList.add('hide');
   $('game').classList.add('hide');$('lobby').classList.remove('hide');
 }
 const TH=[['light','Kẹo ngọt','#ffb3d1'],['peach','Đào','#ffc9a8'],['mint','Bạc hà','#a8e6cf'],['lemon','Chanh','#fff1a8'],['grape','Nho','#d4b8ff'],['dark','Đêm sao','#2d2547']];
@@ -581,7 +582,7 @@ $('bJoin').onclick=join;
 $('inCode').addEventListener('keydown',e=>{if(e.key==='Enter')join()});
 $('bAgain').onclick=again;
 $('bLeave').onclick=leave;
-$('bChat').onclick=()=>{$('chat').classList.toggle('hide');unread=0;$('chatN').textContent=''};
+$('bChat').onclick=()=>{$('chat').classList.toggle('hide');unread=0;$('chatN').textContent='';if(!$('chat').classList.contains('hide'))$('ctext').focus()};
 $('bSend').onclick=sendText;
 $('ctext').addEventListener('keydown',e=>{if(e.key==='Enter')sendText()});
 $('bCopy').onclick=async()=>{
