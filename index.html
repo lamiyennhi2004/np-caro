@@ -15,6 +15,7 @@
 :root[data-theme="lemon"]{--bg1:#fff8c9;--bg2:#e6f7c8;--card:#fffff3ee;--tx:#4a4320;--mut:#948b52;--line:#f0e49a;--cell:#fffffa;--cell2:#fff9d6;--hl:#ffc2d9;--p:#f5a300;--p2:#7bc043;color-scheme:light}
 :root[data-theme="grape"]{--bg1:#ead9ff;--bg2:#d9e6ff;--card:#fcf9ffee;--tx:#3a2a66;--mut:#8a78b8;--line:#d4c1f5;--cell:#fefcff;--cell2:#f1e8ff;--hl:#ffd6ec;--p:#9b5cff;--p2:#ff6fb5;color-scheme:light}
 .th{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);cursor:pointer;padding:0}.th.sel{border-color:var(--p);box-shadow:0 0 0 4px #7c4dff44;transform:scale(1.12)}
+#gstats{display:none}#chat{padding:8px}#stk{flex-wrap:nowrap;overflow-x:auto}.pl{padding:4px 8px}#room b{font-size:24px}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--tx);font-family:"Baloo 2","Segoe UI",system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;display:flex;justify-content:center;padding:14px}
@@ -38,15 +39,15 @@ button.b:disabled{opacity:.5}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
 .mut{color:var(--mut);font-size:14px;text-align:center;margin:10px 0 0}
 .sep{text-align:center;color:var(--mut);margin:12px 0;font-weight:700}
-#players{display:flex;gap:8px;align-items:stretch;margin-bottom:8px}
+#players{display:flex;gap:6px;align-items:stretch;margin-bottom:46px}
 .pl{flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border:3px solid var(--line);border-radius:18px;padding:6px 10px;min-width:0;transition:.2s}
 .pl.on{border-color:var(--g);box-shadow:0 0 0 4px #22c55e44;transform:scale(1.03)}
-.pl svg{width:42px;height:42px;flex:none}
-.pl span{font-weight:800;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pl small{display:block;font-weight:600;color:var(--mut);font-size:12px}
+.pl svg{width:26px;height:26px;flex:none}
+.pl span{font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl small{display:none;font-weight:600;color:var(--mut);font-size:12px}
 #room{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
 #room b{font-size:30px;letter-spacing:6px;color:var(--p)}
-#status{text-align:center;font-weight:800;font-size:19px;margin:6px 0 10px;min-height:28px}
+#status{text-align:center;font-weight:800;font-size:19px;margin:2px 0 6px;min-height:24px}
 #board{display:block;touch-action:none;background:var(--cell);border-radius:12px;box-shadow:0 0 0 3px var(--line);margin:0 auto;cursor:grab}
 .fx2{position:fixed;left:0;top:0;font-size:32px;z-index:70;pointer-events:none}
 .hit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;pointer-events:none;z-index:20;animation:pop .4s ease-out}
@@ -92,10 +93,14 @@ button.b.sm{font-size:14px;padding:6px 12px}
 .tt .row{margin-top:8px}
 #fw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
 .pl{position:relative}
-.bub{position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%) scale(0);background:var(--card);border:3px solid var(--p);border-radius:16px;padding:4px 12px;font-weight:800;max-width:70vw;width:max-content;z-index:30;pointer-events:none;transition:transform .2s;box-shadow:0 6px 16px #0003}
+.bub{font-size:14px;position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%) scale(0);background:var(--card);border:3px solid var(--p);border-radius:16px;padding:4px 12px;font-weight:800;max-width:48vw;width:max-content;z-index:30;pointer-events:none;transition:transform .2s;box-shadow:0 6px 16px #0003}
 .bub.show{transform:translateX(-50%) scale(1)}
-.bub.big{font-size:44px;line-height:1.1;padding:2px 10px}
-#clog{height:130px;overflow-y:auto;text-align:left;font-size:15px;background:var(--cell);border:2px solid var(--line);border-radius:12px;padding:6px 10px;margin-bottom:8px}
+.bub.big{font-size:30px;line-height:1.1;padding:2px 10px}
+#bubX,#bubO{top:calc(100% + 10px);left:0;right:auto;transform:scale(0);transform-origin:18px 0}#bubX.show,#bubO.show{transform:scale(1)}
+.bub::before{content:'';position:absolute;left:12px;top:-14px;border:7px solid transparent;border-bottom-color:var(--p);border-top:0;border-width:0 7px 9px}
+.pl svg.talk{animation:wig .6s ease-in-out 2}
+@keyframes wig{25%{transform:rotate(-14deg) scale(1.2)}75%{transform:rotate(14deg) scale(1.2)}}
+#clog{height:72px;overflow-y:auto;text-align:left;font-size:15px;background:var(--cell);border:2px solid var(--line);border-radius:12px;padding:6px 10px;margin-bottom:8px}
 .cl{margin:2px 0;word-break:break-word}.cl.me b{color:var(--p)}
 #stk{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
 .st{font:inherit;font-size:22px;padding:2px 8px;border-radius:12px;border:2px solid var(--line);background:var(--cell);cursor:pointer;color:var(--tx)}
@@ -179,9 +184,8 @@ button.b.sm{font-size:14px;padding:6px 12px}
   <div id="status"></div>
   <div id="tbar" class="hide"><div id="tfill"></div><div id="tnum"></div></div>
   <div id="bw"><canvas id="board"></canvas></div>
-  <div class="row" style="margin-top:10px"><button class="b sm" id="zO">➖</button><button class="b sm" id="zC">🎯 Về nước cuối</button><button class="b sm" id="zI">➕</button></div>
-  <div class="row" id="thr" style="margin-top:10px"><button class="b" data-k="stone">🪨 Ném đá</button><button class="b" data-k="egg">🥚 Chọi trứng</button><button class="b" data-k="flower">🌹 Tặng hoa</button></div>
-  <div class="row" style="margin-top:14px"><button class="b p hide" id="bAgain">🔁 Ván mới (đổi bên)</button><button class="b" id="bChat">💬 Chat <span id="chatN"></span></button><button class="b" id="bFr">👥 Mời bạn bè</button><button class="b" id="bTheme">🎨 Màu</button><button class="b" id="bLeave">Thoát phòng</button></div>
+  <div class="row" id="thr" style="margin-top:8px;gap:6px"><button class="b sm" id="zO" title="Thu nhỏ">➖</button><button class="b sm" id="zC" title="Về nước cuối">🎯</button><button class="b sm" id="zI" title="Phóng to">➕</button><button class="b sm" data-k="stone">🪨 Đá</button><button class="b sm" data-k="egg">🥚 Trứng</button><button class="b sm" data-k="flower">🌹 Hoa</button></div>
+  <div class="row" style="margin-top:8px"><button class="b p hide" id="bAgain">🔁 Ván mới (đổi bên)</button><button class="b" id="bChat">💬 Chat <span id="chatN"></span></button><button class="b" id="bFr">👥 Mời bạn bè</button><button class="b" id="bTheme">🎨 Màu</button><button class="b" id="bLeave">Thoát phòng</button></div>
   <div id="chat" class="card hide" style="margin-top:12px"><div id="clog"></div><div id="stk"></div><div class="row" style="flex-wrap:nowrap"><input id="ctext" maxlength="100" placeholder="Nhắn gì đó…" autocomplete="off"><button class="b p sm" id="bSend">Gửi</button></div></div>
   <div id="fbox" class="card hide" style="margin-top:12px"><div id="fl2"></div></div>
 </div>
@@ -356,7 +360,7 @@ const cv=$('board'),cx=cv.getContext('2d'),IMG={},K=(r,c)=>r+','+c,TXT={stone:'�
 let V={ox:0,oy:0,s:42},hov=null,bot=null,lastSeen=null,pts=new Map(),pinch=0,moved=false,sp=null;
 AV.forEach(([id],i)=>{const im=new Image();im.onload=()=>draw();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'+document.getElementById(id).innerHTML+'</svg>');IMG[i]=im});
 const dim=()=>{const d=devicePixelRatio||1;return[cv.width/d,cv.height/d,d]};
-function fit(){const w=cv.parentNode.clientWidth;if(!w)return;const h=Math.max(300,Math.min(innerHeight*.6,620)),d=devicePixelRatio||1;cv.style.width=w+'px';cv.style.height=h+'px';cv.width=w*d;cv.height=h*d;g?focus():center(0,0)}
+function fit(){const w=cv.parentNode.clientWidth;if(!w)return;const h=Math.max(280,Math.min(innerHeight*.5,520)),d=devicePixelRatio||1;cv.style.width=w+'px';cv.style.height=h+'px';cv.width=w*d;cv.height=h*d;g?focus():center(0,0)}
 addEventListener('resize',fit);
 function center(r,c){const[W,H]=dim();V.ox=W/2-(c+.5)*V.s;V.oy=H/2-(r+.5)*V.s;draw()}
 const focus=()=>g&&g.last?center(g.last[0],g.last[1]):center(0,0);
@@ -394,7 +398,7 @@ $('zO').onclick=()=>{const[W,H]=dim();zoom(.8,[W/2,H/2])};
 $('zC').onclick=focus;
 
 function showGame(label){
-  $('lobby').classList.add('hide');$('game').classList.remove('hide');$('fbox').classList.add('hide');$('code').textContent=label;
+  document.querySelector('.logo').classList.add('hide');$('lobby').classList.add('hide');$('game').classList.remove('hide');$('fbox').classList.add('hide');$('code').textContent=label;
   ['room','bFr'].forEach(i=>$(i).classList.toggle('hide',!!bot));
   showStats();$('clog').innerHTML='';unread=0;$('chatN').textContent='';$('chat').classList.remove('hide');V.s=42;
 }
@@ -528,6 +532,7 @@ function onChat(m){
   const b=document.createElement('b');b.textContent=m.name+': ';line.append(b,document.createTextNode(msg));
   const lg=$('clog');lg.appendChild(line);lg.scrollTop=lg.scrollHeight;
   while(lg.children.length>60)lg.firstChild.remove();
+  const av=$(m.m==='X'?'plX':'plO').querySelector('svg');av.classList.remove('talk');void av.getBoundingClientRect();av.classList.add('talk');setTimeout(()=>av.classList.remove('talk'),1300);
   const bub=$(m.m==='X'?'bubX':'bubO');bub.textContent=msg;bub.className='bub show'+(m.st&&m.st.length<=2?' big':'');
   clearTimeout(bub._t);bub._t=setTimeout(()=>bub.className='bub',m.st?3000:4500);
   if($('chat').classList.contains('hide')&&!mine){unread++;$('chatN').textContent='('+unread+')'}
@@ -563,7 +568,7 @@ async function again(){
 function leave(){
   if(es)es.close();es=null;g=null;code='';bot=null;
   try{history.replaceState(null,'',location.pathname)}catch(e){}
-  showStats();$('tbar').classList.add('hide');
+  document.querySelector('.logo').classList.remove('hide');showStats();$('tbar').classList.add('hide');
   $('game').classList.add('hide');$('lobby').classList.remove('hide');
 }
 const TH=[['light','Kẹo ngọt','#ffb3d1'],['peach','Đào','#ffc9a8'],['mint','Bạc hà','#a8e6cf'],['lemon','Chanh','#fff1a8'],['grape','Nho','#d4b8ff'],['dark','Đêm sao','#2d2547']];
