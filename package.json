@@ -1,0 +1,8 @@
+{
+  "name": "np-caro",
+  "version": "1.0.0",
+  "description": "NP Caro - co caro online 2 nguoi",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
