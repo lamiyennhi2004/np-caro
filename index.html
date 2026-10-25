@@ -16,7 +16,7 @@
 :root[data-theme="grape"]{--bg1:#ead9ff;--bg2:#d9e6ff;--card:#fcf9ffee;--tx:#3a2a66;--mut:#8a78b8;--line:#d4c1f5;--cell:#fefcff;--cell2:#f1e8ff;--hl:#ffd6ec;--p:#9b5cff;--p2:#ff6fb5;color-scheme:light}
 .th{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);cursor:pointer;padding:0}.th.sel{border-color:var(--p);box-shadow:0 0 0 4px #7c4dff44;transform:scale(1.12)}
 #gstats{display:none}#chat{padding:8px}#stk{flex-wrap:nowrap;overflow-x:auto}.pl{padding:4px 8px}#room b{font-size:24px}
-#bChat{display:none}#thr{flex-wrap:nowrap;justify-content:center;gap:4px}#thr .b.sm{font-size:16px;padding:4px 9px;min-width:0}#chatN{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:10px;font-size:12px;line-height:18px;min-width:18px;padding:0 4px}#chatN:empty{display:none}#gwrap{display:flex;gap:8px;align-items:stretch}#bw{flex:1;min-width:0}#chat{width:260px;flex:none;display:flex;flex-direction:column;margin:0!important;padding:8px;min-height:0}#chat #clog{flex:1;height:auto;min-height:0;margin-bottom:6px}#chat #stk{flex-wrap:wrap;overflow-y:auto;max-height:84px;margin-bottom:6px}#chat #stk .st{font-size:18px;padding:1px 6px}#chat .row{gap:4px}#chat #ctext{min-width:0;flex:1;width:100%}body.ing main{max-width:980px}@media (max-width:640px){#chat{width:132px;padding:6px}#chat #clog{font-size:12px;padding:4px 6px}#chat #stk .st{font-size:16px;padding:0 4px}#chat .row{flex-wrap:wrap!important}#chat #ctext{font-size:16px}}
+#bChat{display:none}#thr{flex-wrap:nowrap;justify-content:center;gap:4px}#thr .b.sm{font-size:16px;padding:4px 6px;min-width:0}#thr{gap:2px}.hit.kiss{animation:up 1.5s forwards}#chatN{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:10px;font-size:12px;line-height:18px;min-width:18px;padding:0 4px}#chatN:empty{display:none}#gwrap{display:flex;gap:8px;align-items:flex-start}#bw{flex:1;min-width:0}#chat{width:260px;flex:none;display:flex;flex-direction:column;margin:0!important;padding:8px;min-height:0;overflow:hidden;box-sizing:border-box}#chat #clog{flex:1;height:auto;min-height:0;margin-bottom:6px}#chat #stk{flex-wrap:wrap;overflow-y:auto;max-height:84px;margin-bottom:6px}#chat #stk .st{font-size:18px;padding:1px 6px}#chat .row{gap:4px}#chat #ctext{min-width:0;flex:1;width:100%}body.ing main{max-width:980px}@media (max-width:640px){#chat{width:132px;padding:6px}#chat #clog{font-size:12px;padding:4px 6px}#chat #stk .st{font-size:16px;padding:0 4px}#chat .row{flex-wrap:wrap!important}#chat #ctext{font-size:16px}}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--tx);font-family:"Baloo 2","Segoe UI",system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;display:flex;justify-content:center;padding:14px}
@@ -189,7 +189,7 @@ button.b.sm{font-size:14px;padding:6px 12px}
   <div id="bw"><canvas id="board"></canvas></div>
   <div id="chat" class="card"><div id="clog"></div><div id="stk" class="hide"></div><div class="row" style="flex-wrap:nowrap"><input id="ctext" maxlength="100" placeholder="Nhắn gì đó…" autocomplete="off"><button class="b sm" id="bBulb" title="Gợi ý tin nhắn">💡</button><button class="b p sm" id="bSend">Gửi</button></div></div>
   </div>
-  <div class="row" id="thr" style="margin-top:8px"><button class="b sm" id="zO" title="Thu nhỏ">➖</button><button class="b sm" id="zC" title="Về nước cuối">🎯</button><button class="b sm" id="zI" title="Phóng to">➕</button><button class="b sm" data-k="stone" title="Ném đá">🪨</button><button class="b sm" data-k="egg" title="Chọi trứng">🥚</button><button class="b sm" data-k="flower" title="Tặng hoa">🌹</button></div>
+  <div class="row" id="thr" style="margin-top:8px"><button class="b sm" id="zO" title="Thu nhỏ">➖</button><button class="b sm" id="zC" title="Về nước cuối">🎯</button><button class="b sm" id="zI" title="Phóng to">➕</button><button class="b sm" data-k="stone" title="Ném đá">🪨</button><button class="b sm" data-k="egg" title="Chọi trứng">🥚</button><button class="b sm" data-k="flower" title="Tặng hoa">🌹</button><button class="b sm" data-k="slap" title="Tát">🖐️</button><button class="b sm" data-k="kiss" title="Hôn gió">😘</button><button class="b sm" data-k="kick" title="Đá">🦶</button></div>
   <div class="row" style="margin-top:8px"><button class="b p hide" id="bAgain">🔁 Ván mới (đổi bên)</button><span id="chatN" style="display:none"></span><button class="b" id="bFr">👥 Mời bạn bè</button><button class="b" id="bTheme">🎨 Màu</button><button class="b" id="bLeave">Thoát phòng</button></div>
   <div id="fbox" class="card hide" style="margin-top:12px"><div id="fl2"></div></div>
 </div>
@@ -257,7 +257,7 @@ function scLoad(c){try{const v=JSON.parse(ld('np_sc_'+c,''));if(v&&typeof v.w===
 function scSave(){if(!bot&&code)sv('np_sc_'+code,JSON.stringify(rsc))}
 function showScore(){const el=$('sbar');if(!g||!g.hasO||!g.you){el.classList.add('hide');return}
   const m=g.you,me=(m==='X'?g.xn:g.on)||'Bạn',op=(m==='X'?g.on:g.xn)||'Đối thủ';
-  el.classList.remove('hide');el.textContent='⚔️ '+me+' '+rsc.w+' – '+rsc.l+' '+op+(rsc.d?' · hòa '+rsc.d:'')}
+  el.classList.remove('hide');el.textContent='⚔️ '+rsc.w+' – '+rsc.l+(rsc.d?' · hòa '+rsc.d:'')}
 function showStats(){
   const s=loadStats(),has=s.w+s.l+s.d>0;
   $('stats').innerHTML=statsText()+(has?' <a id="rs">Xóa</a>':'');
@@ -366,11 +366,11 @@ async function join(){
   if(!/^\d{4}$/.test(c)){setErr('Mã phòng gồm 4 chữ số nha.');return}
   try{await api('join',{code:c,name:myName(),av:myAv});listen(c)}catch(e){setErr(e.message)}
 }
-const cv=$('board'),cx=cv.getContext('2d'),IMG={},K=(r,c)=>r+','+c,TXT={stone:'🪨 Ném đá!',egg:'🥚 Chọi trứng!',flower:'🌹 Tặng hoa nè!'};
+const cv=$('board'),cx=cv.getContext('2d'),IMG={},K=(r,c)=>r+','+c,TXT={stone:'🪨 Ném đá!',egg:'🥚 Chọi trứng!',flower:'🌹 Tặng hoa nè!',slap:'🖐️ Tát nè!',kiss:'😘 Hôn gió nè!',kick:'🦶 Đá nè!'};
 let V={ox:0,oy:0,s:42},hov=null,bot=null,lastSeen=null,pts=new Map(),pinch=0,moved=false,sp=null;
 AV.forEach(([id],i)=>{const im=new Image();im.onload=()=>draw();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'+document.getElementById(id).innerHTML+'</svg>');IMG[i]=im});
 const dim=()=>{const d=devicePixelRatio||1;return[cv.width/d,cv.height/d,d]};
-function fit(){const w=cv.parentNode.clientWidth;if(!w)return;const h=Math.max(280,Math.min(innerHeight*.5,520)),d=devicePixelRatio||1;cv.style.width=w+'px';cv.style.height=h+'px';cv.width=w*d;cv.height=h*d;g?focus():center(0,0)}
+function fit(){const w=cv.parentNode.clientWidth;if(!w)return;const h=Math.max(280,Math.min(innerHeight*.5,520)),d=devicePixelRatio||1;cv.style.width=w+'px';cv.style.height=h+'px';$('chat').style.height=h+'px';cv.width=w*d;cv.height=h*d;g?focus():center(0,0)}
 addEventListener('resize',fit);
 function center(r,c){const[W,H]=dim();V.ox=W/2-(c+.5)*V.s;V.oy=H/2-(r+.5)*V.s;draw()}
 const focus=()=>g&&g.last?center(g.last[0],g.last[1]):center(0,0);
@@ -426,11 +426,11 @@ function listen(c){
 /* ---- ném đá / chọi trứng / tặng hoa ---- */
 function throwFx(m,kind){
   const from=$(m==='X'?'plX':'plO'),to=$(m==='X'?'plO':'plX'),a=from.getBoundingClientRect(),b=to.getBoundingClientRect();
-  const e=document.createElement('div');e.className='fx2';e.textContent={stone:'🪨',egg:'🥚',flower:'🌹'}[kind];document.body.appendChild(e);
+  const e=document.createElement('div');e.className='fx2';e.textContent={stone:'🪨',egg:'🥚',flower:'🌹',slap:'🖐️',kick:'🦶',kiss:'😘'}[kind];document.body.appendChild(e);
   const x0=a.left+a.width/2-16,y0=a.top+a.height/2-16,x1=b.left+b.width/2-16,y1=b.top+b.height/2-16;
   e.animate([{transform:`translate(${x0}px,${y0}px) rotate(0)`},{transform:`translate(${(x0+x1)/2}px,${Math.min(y0,y1)-90}px) rotate(360deg)`},{transform:`translate(${x1}px,${y1}px) rotate(720deg)`}],{duration:700,easing:'ease-in'}).onfinish=()=>{
-    e.remove();const f=document.createElement('div');f.className='hit '+kind;f.textContent={stone:'💥',egg:'🍳',flower:'💖'}[kind];to.appendChild(f);
-    if(kind!=='flower'){to.classList.add('shake');setTimeout(()=>to.classList.remove('shake'),500)}
+    e.remove();const f=document.createElement('div');f.className='hit '+kind;f.textContent={stone:'💥',egg:'🍳',flower:'💖',slap:'💢',kick:'💢',kiss:'💕'}[kind];to.appendChild(f);
+    if(kind!=='flower'&&kind!=='kiss'){to.classList.add('shake');setTimeout(()=>to.classList.remove('shake'),500)}
     setTimeout(()=>f.remove(),kind==='egg'?3500:1500);
   };
 }
@@ -478,13 +478,16 @@ function botMove(){
   if(!bot||!g||g.winner)return;
   const bm=g.you==='X'?'O':'X';if(g.turn!==bm)return;
   const[r,c]=botPick(g.map,bm,g.you,bot.lv);put(r,c,bm);render();
-  if(!g.winner&&Math.random()<.06)setTimeout(()=>{if(bot&&g&&!g.winner)throwFx(bm,['stone','egg','flower'][Math.floor(Math.random()*3)])},700);
+  if(!g.winner&&Math.random()<.06)setTimeout(()=>{if(bot&&g&&!g.winner)botThrow(bm,ALLK[Math.floor(Math.random()*ALLK.length)])},700);
 }
+const ALLK=['stone','egg','flower','slap','kick','kiss'],HOSTILE=['stone','egg','slap','kick'];
+function botThrow(bm,k){throwFx(bm,k);onChat({m:bm,name:'Máy 🤖',text:TXT[k]})}
 function botReact(k){
   setTimeout(()=>{
     if(!bot||!g)return;const bm=g.you==='X'?'O':'X',say=t=>onChat({m:bm,name:'Máy 🤖',text:t});
-    if(k==='flower'){say('Cảm ơn nha 🥰');if(Math.random()<.6)setTimeout(()=>throwFx(bm,'flower'),600)}
-    else{say(k==='egg'?'Trời ơi, trứng! 🍳😭':'Ái da! 😵');if(Math.random()<.5)setTimeout(()=>throwFx(bm,Math.random()<.5?'egg':'stone'),700)}
+    if(k==='flower'){say('Cảm ơn nha 🥰');if(Math.random()<.6)setTimeout(()=>botThrow(bm,'flower'),600)}
+    else if(k==='kiss'){say('Ui, ngại quá đi 😳💕');if(Math.random()<.5)setTimeout(()=>botThrow(bm,'kiss'),600)}
+    else{say(k==='egg'?'Trời ơi, trứng! 🍳😭':k==='kick'?'Đá gì mà đau thế! 🦶😵':k==='slap'?'Tát gì mà đau thế! 🖐️😵':'Ái da! 😵');if(Math.random()<.6)setTimeout(()=>botThrow(bm,HOSTILE[Math.floor(Math.random()*HOSTILE.length)]),700)}
   },900);
 }
 $('bBot').onclick=()=>{if(es){es.close();es=null}bot={lv:+$('lv').value};rsc={w:0,l:0,d:0};code='';myName();showGame('Chơi với máy');fit();newBot('X')};

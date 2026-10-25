@@ -193,7 +193,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === '/api/throw') {
       const kind = String(b.kind);
-      if (!room.o || !['stone', 'egg', 'flower'].includes(kind)) return json(res, 400, { error: 'Chưa có đối thủ để ném 😅' });
+      if (!room.o || !['stone', 'egg', 'flower', 'slap', 'kick', 'kiss'].includes(kind)) return json(res, 400, { error: 'Chưa có đối thủ để ném 😅' });
       const now = Date.now(); room.lt = room.lt || {};
       if (now - (room.lt[pid] || 0) < 800) return json(res, 429, { error: 'Từ từ thôi nè 😄' });
       room.lt[pid] = now;
