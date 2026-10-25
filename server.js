@@ -2,8 +2,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const N = 15;
-const AVN = 20;
+const AVN = 35;
 const MOVE_MS = Number(process.env.MOVE_MS) || 60000;
 const avOf = (v, d) => (Number.isInteger(Number(v)) && Number(v) >= 0 && Number(v) < AVN && v !== '' && v != null) ? Number(v) : d;
 const rooms = new Map();
@@ -31,7 +30,7 @@ function armTimer(room) {
 }
 const INDEX = path.join(__dirname, 'index.html');
 
-function empty() { return '.'.repeat(N * N); }
+const empty = () => new Map();
 function newCode() {
   for (let t = 0; t < 200; t++) {
     const c = String(1000 + Math.floor(Math.random() * 9000));
@@ -39,15 +38,12 @@ function newCode() {
   }
   return null;
 }
-function check(cells, i, ch) {
-  const r = Math.floor(i / N), c = i % N;
+function check(cells, r, c, ch) {
   for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
-    const l = [i];
+    const l = [[r, c]];
     for (const s of [1, -1]) {
       let rr = r + dr * s, cc = c + dc * s;
-      while (rr >= 0 && rr < N && cc >= 0 && cc < N && cells[rr * N + cc] === ch) {
-        l.push(rr * N + cc); rr += dr * s; cc += dc * s;
-      }
+      while (cells.get(rr + ',' + cc) === ch) { l.push([rr, cc]); rr += dr * s; cc += dc * s; }
     }
     if (l.length >= 5) return l;
   }
@@ -55,7 +51,7 @@ function check(cells, i, ch) {
 }
 function view(room, pid) {
   return {
-    cells: room.cells, turn: room.turn, winner: room.winner, line: room.line, last: room.last,
+    cells: room.moves, turn: room.turn, winner: room.winner, line: room.line, last: room.last,
     xn: room.x.name, on: room.o ? room.o.name : '', hasO: !!room.o,
     left: room.deadline ? Math.max(0, room.deadline - Date.now()) : 0, reason: room.reason || '',
     xa: room.x.av, oa: room.o ? room.o.av : 1,
@@ -155,7 +151,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/create') {
       const code = newCode();
       if (!code) return json(res, 503, { error: 'Máy chủ đang đầy, thử lại sau nhé' });
-      rooms.set(code, { cells: empty(), turn: 'X', x: { id: pid, name: clean(b.name), av: avOf(b.av, 0) }, o: null, winner: '', reason: '', deadline: 0, t: null, line: [], last: -1, clients: new Set(), updated: Date.now() });
+      rooms.set(code, { cells: empty(), moves: [], turn: 'X', x: { id: pid, name: clean(b.name), av: avOf(b.av, 0) }, o: null, winner: '', reason: '', deadline: 0, t: null, line: [], last: null, clients: new Set(), updated: Date.now() });
       return json(res, 200, { code });
     }
     const room = rooms.get(String(b.code));
@@ -186,22 +182,29 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { ok: true });
     }
     if (url.pathname === '/api/move') {
-      const i = Number(b.i);
-      if (!room.o || room.winner || room.turn !== mark || !Number.isInteger(i) || i < 0 || i >= N * N || room.cells[i] !== '.') return json(res, 400, { error: 'Nước đi không hợp lệ' });
-      room.cells = room.cells.slice(0, i) + mark + room.cells.slice(i + 1);
-      room.last = i;
-      const l = check(room.cells, i, mark);
-      if (l) { room.winner = mark; room.line = l; }
-      else if (!room.cells.includes('.')) room.winner = 'D';
-      else room.turn = mark === 'X' ? 'O' : 'X';
+      const r = Number(b.r), c = Number(b.c), k = r + ',' + c;
+      if (!room.o || room.winner || room.turn !== mark || !Number.isInteger(r) || !Number.isInteger(c) || Math.abs(r) > 100000 || Math.abs(c) > 100000 || room.cells.has(k)) return json(res, 400, { error: 'Nước đi không hợp lệ' });
+      room.cells.set(k, mark); room.moves.push([r, c, mark]); room.last = [r, c];
+      const l = check(room.cells, r, c, mark);
+      if (l) { room.winner = mark; room.line = l; } else room.turn = mark === 'X' ? 'O' : 'X';
       armTimer(room);
       broadcast(room);
+      return json(res, 200, { ok: true });
+    }
+    if (url.pathname === '/api/throw') {
+      const kind = String(b.kind);
+      if (!room.o || !['stone', 'egg', 'flower'].includes(kind)) return json(res, 400, { error: 'Chưa có đối thủ để ném 😅' });
+      const now = Date.now(); room.lt = room.lt || {};
+      if (now - (room.lt[pid] || 0) < 800) return json(res, 429, { error: 'Từ từ thôi nè 😄' });
+      room.lt[pid] = now;
+      const msg = JSON.stringify({ m: mark, name: (mark === 'X' ? room.x : room.o).name, kind });
+      for (const cl of room.clients) cl.res.write('event: throw\ndata: ' + msg + '\n\n');
       return json(res, 200, { ok: true });
     }
     if (url.pathname === '/api/again') {
       if (room.winner && room.o) {
         [room.x, room.o] = [room.o, room.x];
-        Object.assign(room, { cells: empty(), turn: 'X', winner: '', reason: '', line: [], last: -1 });
+        Object.assign(room, { cells: empty(), moves: [], turn: 'X', winner: '', reason: '', line: [], last: null });
         armTimer(room);
         broadcast(room);
       }
